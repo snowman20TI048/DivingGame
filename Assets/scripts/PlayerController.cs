@@ -64,6 +64,24 @@ public class PlayerController : MonoBehaviour
     private ShinyEffectForUGUI shinyEffect;
 
 
+    ////* ここから追加 *////
+
+
+    [SerializeField]
+    private Transform limitLeftBottom;　　　　// 画面左下のゲームオブジェクトの位置情報
+
+    [SerializeField]
+    private Transform limitRightTop;          // 画面右上のゲームオブジェクトの位置情報
+
+
+    [SerializeField]
+    private FloatingJoystick joystick;
+
+
+
+    ////* ここまで *////
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -86,22 +104,23 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
 
-
-        ////* ここから追加 *////
-
-
+        // 着水したら、移動させない
         if (inWater)
-        {　　// <=　条件式に bool 型の変数名を書いた場合、inWater == true を確認しているのと同じ条件になります。!inWater の場合には inWater == false の確認と同義です。
+        {
             return;
         }
-
-
-        ////* ここまで *////
-
 
         // キー入力の受付
         x = Input.GetAxis("Horizontal");
         z = Input.GetAxis("Vertical");
+
+
+        // ジョイスティックによる入力の受付
+        x = joystick.Horizontal;
+        z = joystick.Vertical;
+
+
+
 
         // velocity(速度)に新しい値を代入して移動
         rb.velocity = new Vector3(x * moveSpeed, -fallSpeed, z * moveSpeed);
@@ -143,32 +162,31 @@ public class PlayerController : MonoBehaviour
             txtScore.text = score.ToString();
         }
     }
-
     /// <summary>
     /// 水面に顔を出す
     /// </summary>
     /// <returns></returns>
     private IEnumerator OutOfWater()
     {
-        // １秒待つ
-        yield return new WaitForSeconds(1.0f);   //  <= yield による処理。yield return new WaitForSecondsメソッドは、引数で指定した秒数だけ次の処理へ移らずに処理を一時停止する処理 
 
-        // Rigidbody コンポーネントの IsKinematic にスイッチを入れてキャラの操作を停止する
+        yield return new WaitForSeconds(0.1f);
+
+        if (attitudeType == AttitudeType.Prone)
+        {
+            ChangeAttitude();
+        }
+
+        yield return new WaitForSeconds(1.0f);
+
         rb.isKinematic = true;
 
-        // キャラの姿勢（回転）を変更する
         transform.eulerAngles = new Vector3(-30, 180, 0);
 
-        // DOTweenを利用して、１秒かけて水中から水面へとキャラを移動させる
         transform.DOMoveY(4.7f, 1.0f);
     }
 
     void Update()
     {
-
-
-        ////* ここから追加 *////
-
 
         if (inWater)
         {
@@ -177,6 +195,13 @@ public class PlayerController : MonoBehaviour
             btnChangeAttitude.interactable = false;
             return;
         }
+
+
+        ////* ここから追加 *////
+
+
+        // 移動範囲内か確認
+        LimitMoveArea();
 
 
         ////* ここまで *////
@@ -311,4 +336,29 @@ public class PlayerController : MonoBehaviour
                 break;
         }
     }
+
+
+    ////* ここからメソッドを１つ追加 *////
+
+
+    /// <summary>
+    /// 移動範囲の確認と制限
+    /// </summary>
+    private void LimitMoveArea()
+    {
+
+        // 現在のXの位置が移動範囲内に収まっているか確認し、超えていた場合には下限(左端)か上限(右端)に合わせる
+        float limitX = Mathf.Clamp(transform.position.x, limitLeftBottom.position.x, limitRightTop.position.x);
+
+        // 現在のZの位置が移動範囲内に収まっているか確認し、超えていた場合には下限(手前側)か上限(奥側)に合わせる
+        float limitZ = Mathf.Clamp(transform.position.z, limitLeftBottom.position.z, limitRightTop.position.z);
+
+        // 制限値内になるように位置情報を更新
+        transform.position = new Vector3(limitX, transform.position.y, limitZ);
+    }
+
+
+    ////* ここまで *////
+
+
 }

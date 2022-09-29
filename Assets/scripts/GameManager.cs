@@ -17,12 +17,15 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private CameraController cameraController;
 
+    [SerializeField]
+    private ResultPopUp resultPopUp;
+
 
     ////* ここから追加 *////
 
 
     [SerializeField]
-    private ResultPopUp resultPopUp;
+    private AudioManager audioManager;
 
 
     ////* ここまで *////
@@ -46,6 +49,8 @@ public class GameManager : MonoBehaviour
         // Y軸が高さの情報なので、双方の高さの値を減算して差分値を距離とする
         distance = player.transform.position.y - goal.position.y;
 
+        txtDistance.text = distance.ToString("F2");
+
         // 距離が 0 以下になったら
         if (distance <= 0)
         {
@@ -53,26 +58,25 @@ public class GameManager : MonoBehaviour
             // 距離が 0 以下になったので、ゴールと判定する
             isGoal = true;
 
-            // 距離を 0 にする
-            distance = 0;
+            txtDistance.text = 0.ToString("F2");
 
             // カメラを初期のカメラに戻す
             cameraController.SetDefaultCamera();
+
+            // リザルト表示
+            resultPopUp.DisplayResult();
 
 
             ////* ここから追加 *////
 
 
-            // リザルト表示
-            resultPopUp.DisplayResult();
+            // ゲームクリアのBGMを再生する
+            audioManager.PlayBGM(AudioManager.BgmType.GameClear);
 
 
             ////* ここまで *////
 
 
         }
-
-        // 距離の画面表示を更新
-        txtDistance.text = distance.ToString("F2");
     }
 }
