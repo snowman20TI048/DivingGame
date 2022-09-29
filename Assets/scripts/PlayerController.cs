@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using Coffee.UIExtensions;     //  <=  ☆　ShinyEffectForUGUI を利用するために必要な宣言です。
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,9 +16,6 @@ public class PlayerController : MonoBehaviour
     [Header("着水判定用。trueなら着水済")]
     public bool inWater;
 
-
-    ////* ここから追加 *////
-
     // キャラの状態の種類
     public enum AttitudeType
     {
@@ -29,9 +27,6 @@ public class PlayerController : MonoBehaviour
     public AttitudeType attitudeType;
 
 
-    ////* ここまで *////
-
-
     private Rigidbody rb;
 
     private float x;
@@ -41,15 +36,12 @@ public class PlayerController : MonoBehaviour
 
     private int score;                                             // 花輪を通過した際の得点の合計値管理用
 
-
-    ////* ここから追加 *////
-
-
     private Vector3 proneRotation = new Vector3(-90, 0, 0);        // 伏せの姿勢の回転角度の値
 
+    private float attitudeTimer;                                   // 姿勢変更が可能になるまでの計測用タイマー
+    private float chargeTime = 2.0f;                               // 姿勢変更が可能になるまでのチャージ(待機)時間
 
-    ////* ここまで *////
-
+    private bool isCharge;                                         // チャージ完了判定用。false は未完了(チャージ中)、true はチャージ完了
 
     [SerializeField, Header("水しぶきのエフェクト")]
     private GameObject waterEffectPrefab = null;
@@ -60,6 +52,22 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Text txtScore;
 
+    [SerializeField]
+    private Button btnChangeAttitude;
+
+    [SerializeField]
+    private Image imgGauge;
+
+
+    ////* ここから追加 *////
+
+
+    [SerializeField]
+    private ShinyEffectForUGUI shinyEffect;
+
+
+    ////* ここまで *////
+
 
     void Start()
     {
@@ -68,16 +76,14 @@ public class PlayerController : MonoBehaviour
         // 初期の姿勢を設定(頭を水面方向に向ける)
         transform.eulerAngles = straightRotation;
 
-
-        ////* ここから追加 *////
-
-
         // 現在の姿勢を「直滑降」に変更(いままでの姿勢)
         attitudeType = AttitudeType.Straight;
 
+        // ボタンのOnClickイベントに ChangeAttitude メソッドを追加する
+        btnChangeAttitude.onClick.AddListener(ChangeAttitude);
 
-        ////* ここまで *////
-
+        // ボタンを非活性化(半透明で押せない状態)
+        btnChangeAttitude.interactable = false;
     }
 
     void FixedUpdate()
@@ -147,10 +153,6 @@ public class PlayerController : MonoBehaviour
         transform.DOMoveY(4.7f, 1.0f);
     }
 
-
-    ////* ここからメソッドを２つ追加 *////
-
-
     void Update()
     {
 
@@ -160,6 +162,70 @@ public class PlayerController : MonoBehaviour
 
             // 姿勢の変更
             ChangeAttitude();
+        }
+
+        // チャージ完了状態ではなく、姿勢が普通の状態
+        if (isCharge == false && attitudeType == AttitudeType.Straight)
+        {
+
+            // タイマーを加算する = チャージを行う
+            attitudeTimer += Time.deltaTime;
+
+            // ゲージ表示を更新
+            imgGauge.DOFillAmount(attitudeTimer / chargeTime, 0.1f);
+
+            // ボタンを非活性化(半透明で押せない状態)
+            btnChangeAttitude.interactable = false;
+
+            // タイマーがチャージ時間(満タン)になったら
+            if (attitudeTimer >= chargeTime)
+            {
+
+                // タイマーの値をチャージの時間で止めるようにする
+                attitudeTimer = chargeTime;
+
+                // チャージ状態にする
+                isCharge = true;
+
+                // ボタンを活性化(押せる状態)
+                btnChangeAttitude.interactable = true;
+
+
+                ////* ここから追加 *////
+
+
+                // 満タン時のエフェクト
+                shinyEffect.Play(0.5f);
+
+
+                ////* ここまで *////
+
+            }
+        }
+
+        // 姿勢が伏せの状態
+        if (attitudeType == AttitudeType.Prone)
+        {
+
+            // タイマーを減算する = チャージを減らす
+            attitudeTimer -= Time.deltaTime;
+
+            // ゲージ表示を更新
+            imgGauge.DOFillAmount(attitudeTimer / chargeTime, 0.1f);
+
+            // タイマー(チャージ)が 0 以下になったら
+            if (attitudeTimer <= 0)
+            {
+
+                // タイマーをリセットして、再度計測できる状態にする
+                attitudeTimer = 0;
+
+                // ボタンを非活性化(半透明で押せない状態)
+                btnChangeAttitude.interactable = false;
+
+                // 強制的に姿勢を直滑降に戻す
+                ChangeAttitude();
+            }
         }
     }
 
@@ -176,6 +242,17 @@ public class PlayerController : MonoBehaviour
             // 現在の姿勢が「直滑降」だったら
             case AttitudeType.Straight:
 
+                // 未チャージ状態(チャージ中)なら
+                if (isCharge == false)
+                {
+
+                    // 以降の処理を行わない = 未チャージ状態なので、チャージ時の処理を行えないようにする
+                    return;
+                }
+
+                // チャージ状態を未チャージ状態にする
+                isCharge = false;
+
                 // 現在の姿勢を「伏せ」に変更
                 attitudeType = AttitudeType.Prone;
 
@@ -184,6 +261,9 @@ public class PlayerController : MonoBehaviour
 
                 // 空気抵抗の値を上げて落下速度を遅くする
                 rb.drag = 25.0f;
+
+                // ボタンの子オブジェクトの画像を回転させる
+                btnChangeAttitude.transform.GetChild(0).DORotate(new Vector3(0, 0, 180), 0.25f);
 
                 // 処理を抜ける(次の case には処理が入らない)
                 break;
@@ -200,12 +280,11 @@ public class PlayerController : MonoBehaviour
                 // 空気抵抗の値を元に戻して落下速度を戻す
                 rb.drag = 0f;
 
+                // ボタンの子オブジェクトの画像を回転させる
+                btnChangeAttitude.transform.GetChild(0).DORotate(new Vector3(0, 0, 90), 0.25f);
+
                 // 処理を抜ける
                 break;
         }
     }
-
-
-    ////* ここまで *////
-
 }

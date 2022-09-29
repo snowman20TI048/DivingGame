@@ -5,18 +5,11 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
 
-    ////* ‚±‚±‚©‚ç’Ç‰Á *////
 
 
     [SerializeField]
     private PlayerController playerController;
 
-
-    //[SerializeField]                        //  <=  íœ‚µ‚Ü‚·
-    //private GameObject playerObj;           //  <=  íœ‚µ‚Ü‚·
-
-
-    ////* ‚±‚±‚Ü‚Å *////
 
 
     private Vector3 offset;
@@ -32,7 +25,6 @@ public class CameraController : MonoBehaviour
     void Update()
     {
 
-        ////* ‚±‚±‚©‚ç’Ç‰Á *////
 
 
         // ’……ó‘Ô‚É‚È‚Á‚½‚ç
@@ -43,8 +35,6 @@ public class CameraController : MonoBehaviour
         }
 
 
-        ////* ‚±‚±‚Ü‚Å *////
-
 
         // ’Ç]‘ÎÛ‚ª‚¢‚éê‡
         if (playerController != null)
@@ -54,8 +44,6 @@ public class CameraController : MonoBehaviour
             transform.position = playerController.transform.position + offset;  //   <=  ˆ—‚ð‘‚«Š·‚¦‚Ü‚·
         }
 
-
-        ////* ‚±‚±‚Ü‚Å *////
 
     }
 }

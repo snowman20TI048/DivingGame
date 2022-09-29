@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
         //Debug.Log(distance.ToString("F2"));
 
         // 距離の画面表示を更新
-        txtDistance.text = distance.ToString("F2");
+        txtDistance.text = distance.ToString("F2");//Tostringで、float型とかをString型に変更。F2で、小数点第2位まで表示。
 
 
     }
