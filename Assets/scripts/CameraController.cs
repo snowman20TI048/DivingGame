@@ -1,15 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;    //　<=　☆　追加
 
 public class CameraController : MonoBehaviour
 {
-
-
-
     [SerializeField]
     private PlayerController playerController;
 
+
+    ////* ここから追加 *////
+
+
+    [SerializeField]
+    private Camera fpsCamera;                // 一人称カメラの Camera コンポーネントの代入用
+
+    [SerializeField]
+    private Camera selfishCamera;            // 自撮りカメラの Camera コンポーネントの代入用
+
+    [SerializeField]
+    private Button btnChangeCameara;         // カメラの制御用ボタンの Button コンポーネントの代入用
+
+    private int cameraIndex;                 // 現在適用しているカメラの通し番号
+    private Camera mainCamera;               // Main Camera ゲームオブジェクトの Camera コンポーネントの代入用
+
+
+    ////* ここまで *////
 
 
     private Vector3 offset;
@@ -18,15 +34,28 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         // カメラと追従対象のゲームオブジェクトとの距離を補正値として取得
-        offset = transform.position - playerController.transform.position;   //  <=  ☆　処理を書き換えます
+        offset = transform.position - playerController.transform.position;
+
+
+        ////* ここから追加 *////
+
+        // MainCamera Tag を持つゲームオブジェクト(MainCamera ゲームオブジェクト)の Camera コンポーネントを取得して代入
+        mainCamera = Camera.main;
+
+        // ボタンのOnClickイベントにメソッドを登録
+        btnChangeCameara.onClick.AddListener(ChangeCamera);
+
+        // カメラを初期カメラ(三人称カメラ)に戻す 
+        SetDefaultCamera();
+
+
+        ////* ここまで *////
+
     }
 
 
     void Update()
     {
-
-
-
         // 着水状態になったら
         if (playerController.inWater == true)
         {
@@ -34,16 +63,60 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-
-
         // 追従対象がいる場合
         if (playerController != null)
-        {　　　　　　　　　　　　　　　　　　　　　//  <=  条件を書き換えます
+        {
 
             // カメラの位置を追従対象の位置 + 補正値にする
-            transform.position = playerController.transform.position + offset;  //   <=  処理を書き換えます
+            transform.position = playerController.transform.position + offset;
         }
-
-
     }
+
+
+    ////* ここからメソッドを２つ追加 *////
+
+    /// <summary>
+    /// カメラを変更(ボタンを押すたびに呼び出される)
+    /// </summary>
+    private void ChangeCamera()
+    {
+
+        // 現在のカメラの通し番号に応じて、次のカメラを用意して切り替える
+        switch (cameraIndex)
+        {
+            case 0:
+                cameraIndex++;
+                mainCamera.enabled = false;
+                fpsCamera.enabled = true;
+                break;
+            case 1:
+                cameraIndex++;
+                fpsCamera.enabled = false;
+                selfishCamera.enabled = true;
+                break;
+            case 2:
+                cameraIndex = 0;
+                selfishCamera.enabled = false;
+                mainCamera.enabled = true;
+                break;
+        }
+    }
+
+
+    /// <summary>
+    /// カメラを初期カメラ(三人称カメラ)に戻す
+    /// </summary>
+    public void SetDefaultCamera()
+    {
+        cameraIndex = 0;
+
+        mainCamera.enabled = true;
+        fpsCamera.enabled = false;
+        selfishCamera.enabled = false;
+    }
+
+
+    ////* ここまで *////
+
 }
+

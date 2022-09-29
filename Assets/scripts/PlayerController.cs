@@ -43,15 +43,7 @@ public class PlayerController : MonoBehaviour
 
     private bool isCharge;                                         // チャージ完了判定用。false は未完了(チャージ中)、true はチャージ完了
 
-
-    ////* ここから追加 *////
-
-
     private Animator anim;
-
-
-    ////* ここまで *////
-
 
     [SerializeField, Header("水しぶきのエフェクト")]
     private GameObject waterEffectPrefab = null;
@@ -88,19 +80,24 @@ public class PlayerController : MonoBehaviour
         // ボタンを非活性化(半透明で押せない状態)
         btnChangeAttitude.interactable = false;
 
-
-        ////* ここから追加 *////
-
-
         anim = GetComponent<Animator>();
-
-
-        ////* ここまで *////
-
     }
 
     void FixedUpdate()
     {
+
+
+        ////* ここから追加 *////
+
+
+        if (inWater)
+        {　　// <=　条件式に bool 型の変数名を書いた場合、inWater == true を確認しているのと同じ条件になります。!inWater の場合には inWater == false の確認と同義です。
+            return;
+        }
+
+
+        ////* ここまで *////
+
 
         // キー入力の受付
         x = Input.GetAxis("Horizontal");
@@ -168,6 +165,22 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+
+
+        ////* ここから追加 *////
+
+
+        if (inWater)
+        {
+
+            // ボタンを非活性化して押せない状態にする
+            btnChangeAttitude.interactable = false;
+            return;
+        }
+
+
+        ////* ここまで *////
+
 
         // スペースキーを押したら
         if (Input.GetKeyDown(KeyCode.Space))
@@ -270,16 +283,8 @@ public class PlayerController : MonoBehaviour
                 // ボタンの子オブジェクトの画像を回転させる
                 btnChangeAttitude.transform.GetChild(0).DORotate(new Vector3(0, 0, 180), 0.25f);
 
-
-                ////* ここから追加 *////
-
-
                 // 伏せの状態に遷移するための条件を指定する  => idle から stan のアニメーションに遷移する
                 anim.SetBool("Prone", true);
-
-
-                ////* ここまで *////
-
 
                 // 処理を抜ける(次の case には処理が入らない)
                 break;
@@ -299,16 +304,8 @@ public class PlayerController : MonoBehaviour
                 // ボタンの子オブジェクトの画像を回転させる
                 btnChangeAttitude.transform.GetChild(0).DORotate(new Vector3(0, 0, 90), 0.25f);
 
-
-                ////* ここから追加 *////
-
-
                 // 伏せの状態を止めるための遷移の条件を指定する => stan から idle に遷移する
                 anim.SetBool("Prone", false);
-
-
-                ////* ここまで *////
-
 
                 // 処理を抜ける
                 break;
