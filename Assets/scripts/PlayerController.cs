@@ -110,15 +110,15 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+    #if UNITY_EDITOR
         // キー入力の受付
         x = Input.GetAxis("Horizontal");
         z = Input.GetAxis("Vertical");
-
-
-        // ジョイスティックによる入力の受付
+    #else
+       // ジョイスティックによる入力の受付
         x = joystick.Horizontal;
         z = joystick.Vertical;
-
+    #endif
 
 
 

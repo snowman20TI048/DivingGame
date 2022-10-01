@@ -15,7 +15,6 @@ public class FlowerCircle : MonoBehaviour
     private GameObject effectPrefab;
 
 
-    ////* ここから追加 *////
 
 
     [SerializeField]
@@ -31,7 +30,25 @@ public class FlowerCircle : MonoBehaviour
     private float moveDistance;
 
 
-    ////* ここまで *////
+
+    [SerializeField, Header("移動する時間と距離をランダムにする割合"), Range(0, 100)]
+    private int randomMovingPercent;
+
+    [SerializeField, Header("移動時間のランダム幅")]
+    private Vector2 durationRange;
+
+    [SerializeField, Header("移動距離のランダム幅")]
+    private Vector2 moveDistanceRange;
+
+    [SerializeField, Header("大きさの設定")]
+    private float[] flowerSizes;
+
+    [SerializeField, Header("点数の倍率")]
+    private float[] pointRate;
+
+
+    private bool isMoving;
+
 
 
     void Start()
@@ -40,8 +57,6 @@ public class FlowerCircle : MonoBehaviour
         // アタッチしたゲームオブジェクト(花輪)を回転させる
         transform.DORotate(new Vector3(0, 360, 0), 5.0f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart);
 
-
-        ////* ここから追加 *////
 
 
         // この花輪が移動する花輪の設定なら
@@ -53,7 +68,6 @@ public class FlowerCircle : MonoBehaviour
         }
 
 
-        ////* ここまで *////
 
 
     }
@@ -64,8 +78,6 @@ public class FlowerCircle : MonoBehaviour
     {
 
 
-        ////* ここから追加 *////
-
 
         // 水面に触れても通過判定は行わない
         if (other.gameObject.tag == "Water")
@@ -73,8 +85,6 @@ public class FlowerCircle : MonoBehaviour
             return;
         }
 
-
-        ////* ここまで *////
 
 
         // 花輪の BoxCollider のスイッチをオフにして重複判定を防止
@@ -95,7 +105,6 @@ public class FlowerCircle : MonoBehaviour
     {
 
 
-        ////* ここから追加 *////
 
         // ①SE再生
         AudioSource.PlayClipAtPoint(flowerSE, transform.position);
@@ -126,17 +135,91 @@ public class FlowerCircle : MonoBehaviour
         Destroy(effect, 1.0f);
 
 
-        ////* ここから追加 *////
 
         // ②SE再生
         AudioSource.PlayClipAtPoint(flowerSE, transform.position);
-
-
-        ////* ここまで *////
 
 
         // 花輪を1秒後に破棄
         Destroy(gameObject, 1.0f);
 
     }
+
+
+
+    /// <summary>
+    /// 移動する花輪の設定
+    /// </summary>
+    public void SetUpMovingFlowerCircle(bool isMoving, bool isScaleChanging)
+    {
+
+        // 移動する花輪か、通常の花輪かの設定
+        this.isMoving = isMoving;
+
+        // 移動する場合
+        if (this.isMoving)
+        {
+
+            // ランダムな移動時間や距離を使うか、戻り値を持つメソッドを利用して判定
+            if (DetectRandomMovingFromPercent())
+            {
+
+                // ランダムの場合には、移動時間と距離のランダム設定を行う
+                ChangeRandomMoveParameters();
+            }
+        }
+
+        // 花輪の大きさを変更する場合
+        if (isScaleChanging)
+        {
+
+            // 大きさを変更
+            ChangeRandomScales();
+        }
+    }
+
+    /// <summary>
+    /// 移動時間と距離をランダムにするか判定。true の場合はランダムとする
+    /// </summary>
+    /// <returns></returns>
+    private bool DetectRandomMovingFromPercent()
+    {
+
+        // 処理結果を  bool 値で戻す。randomMovingPercent の値よりも大きければ、false、同じか小さければ true
+        return Random.Range(0, 100) <= randomMovingPercent;
+    }
+
+    /// <summary>
+    /// ランダム値を取得して移動
+    /// </summary>
+    private void ChangeRandomMoveParameters()
+    {
+
+        // 移動時間をランダム値の範囲で設定
+        duration = Random.Range(durationRange.x, durationRange.y);
+
+        // 移動距離をランダム値の範囲で設定
+        moveDistance = Random.Range(moveDistanceRange.x, moveDistanceRange.y);
+    }
+
+    /// <summary>
+    /// 大きさを変更して点数に反映
+    /// </summary>
+    private void ChangeRandomScales()
+    {
+
+        // ランダム値の範囲内で大きさを設定
+        int index = Random.Range(0, flowerSizes.Length);
+
+        // 大きさを変更
+        transform.localScale *= flowerSizes[index];
+
+        // 点数を変更
+        point = Mathf.CeilToInt(point * pointRate[index]);   // Mathf.CeilToInt メソッドについて調べてみましょう。
+    }
+
+
+
+
+
 }
