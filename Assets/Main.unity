@@ -535,7 +535,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &120977886
 Transform:
   m_ObjectHideFlags: 0
@@ -1157,6 +1157,13 @@ MonoBehaviour:
   cameraController: {fileID: 963194229}
   resultPopUp: {fileID: 1781250301}
   audioManager: {fileID: 636575122}
+  isRandomStaging: 1
+  movingFlowerCirclePercent: 50
+  scalingFlowerCirclePercent: 50
+  flowerCirclePrefab: {fileID: 3176708219805531938, guid: 15b464b7c7ad3894c8b685adf8bcc0c2,
+    type: 3}
+  limitLeftBottom: {fileID: 1697223168}
+  limitRightTop: {fileID: 809523250}
 --- !u!4 &476325452
 Transform:
   m_ObjectHideFlags: 0
@@ -2525,7 +2532,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.5735764, y: 0, z: 0, w: 0.8191521}
-  m_LocalPosition: {x: 0, y: 104, z: -2}
+  m_LocalPosition: {x: 0, y: 124, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -5298,7 +5305,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7858680517457762162}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 100, z: 0}
+  m_LocalPosition: {x: 0, y: 120, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 7858680517458115216}
