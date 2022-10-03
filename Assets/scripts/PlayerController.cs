@@ -64,7 +64,6 @@ public class PlayerController : MonoBehaviour
     private ShinyEffectForUGUI shinyEffect;
 
 
-    ////* ここから追加 *////
 
 
     [SerializeField]
@@ -79,7 +78,6 @@ public class PlayerController : MonoBehaviour
 
 
 
-    ////* ここまで *////
 
 
     void Start()
@@ -197,14 +195,12 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        ////* ここから追加 *////
 
 
         // 移動範囲内か確認
         LimitMoveArea();
 
 
-        ////* ここまで *////
 
 
         // スペースキーを押したら
@@ -338,8 +334,6 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    ////* ここからメソッドを１つ追加 *////
-
 
     /// <summary>
     /// 移動範囲の確認と制限
@@ -358,7 +352,53 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    ////* ここまで *////
+
+
+    /// <summary>
+    /// キャラの落下と移動を一時停止
+    /// </summary>
+    public void StopMove()
+    {
+
+        // キャラのゲームオブジェクトを物理演算の影響を受けない状態にする(重力の影響を受けない)
+        rb.isKinematic = true;
+
+        // キャラの速度を 0 にして停止する
+        rb.velocity = Vector3.zero;
+    }
+
+
+    /// <summary>
+    /// キャラの落下と移動を再開
+    /// </summary>
+    public void ResumeMove()
+    {
+
+        // キャラのゲームオブジェクトを物理演算の影響を受ける状態に戻す(再び重力の影響を受けるようになる)
+        rb.isKinematic = false;
+
+        // キャラに落下速度を設定する
+        rb.velocity = new Vector3(0, -fallSpeed, 0);
+    }
+
+
+    /// <summary>
+    /// スコアを半分にする
+    /// </summary>
+    public void HalveScore()
+    {
+
+        // スコアを半分にする
+        score = Mathf.CeilToInt(score * 0.5f);
+
+        Debug.Log("スコア半分 : " + score);
+
+        // 画面のスコア表示を更新
+        txtScore.text = score.ToString();
+    }
+
+
+
 
 
 }
