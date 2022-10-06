@@ -55,6 +55,12 @@ public class GameManager : MonoBehaviour
     private SkyboxChanger skyboxChanger;            // SkyboxChanger スクリプトの操作を行うための変数
 
 
+    [SerializeField, Header("障害物とアイテムをランダムに生成する場合にはチェックする")]
+    private bool isRandomObjects;
+
+    [SerializeField, Header("障害物とアイテムのプレファブ登録")]
+    private GameObject[] randomObjPrefabs;
+
 
 
 
@@ -156,6 +162,19 @@ public class GameManager : MonoBehaviour
             yield return StartCoroutine(CreateRandomStage());
         }
 
+
+
+        // 障害物とアイテムをランダムで配置する場合
+        if (isRandomObjects)
+        {
+
+            // 障害物とアイテムをランダムに生成して設置する
+            yield return StartCoroutine(CreateRandomObjects());
+        }
+
+
+
+
         // Updateを再開
         isGoal = false;
 
@@ -213,6 +232,42 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("ランダムステージ完成");
     }
+
+
+    /// <summary>
+    /// // 障害物とアイテムをランダムに生成
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator CreateRandomObjects()
+    {
+
+        // ステージの長さ
+        int height = (int)(goal.position.y);
+        int count = 0;
+        Debug.Log("初期のスタート位置 : " + height);
+
+        while (height <= player.transform.position.y)
+        {
+            height += Random.Range(10, 15);
+
+            Debug.Log("現在の生成位置 : " + height);
+
+            // 位置を設定して生成
+            Instantiate(randomObjPrefabs[Random.Range(0, randomObjPrefabs.Length)], new Vector3(Random.Range(limitLeftBottom.position.x, limitRightTop.position.x), height, Random.Range(limitLeftBottom.position.z, limitRightTop.position.z)), Quaternion.identity);
+
+            count++;
+
+            Debug.Log("障害物とアイテムの合計生成数 : " + count);
+
+            yield return null;
+        }
+
+        Debug.Log("障害物とアイテムのランダム配置完成");
+    }
+
+
+
+
 
 
 

@@ -1173,6 +1173,10 @@ MonoBehaviour:
   limitRightTop: {fileID: 809523250}
   sliderAltimeter: {fileID: 956945395}
   skyboxChanger: {fileID: 514571661}
+  isRandomObjects: 1
+  randomObjPrefabs:
+  - {fileID: 3347936245719156983, guid: 870ed0a5a3c33ea448dcb31d95fba9e5, type: 3}
+  - {fileID: 1078538704441766784, guid: c7d7a455ef20d024b904d6ae9b28f399, type: 3}
 --- !u!4 &476325452
 Transform:
   m_ObjectHideFlags: 0
@@ -3666,7 +3670,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1495526545
 Transform:
   m_ObjectHideFlags: 0
@@ -5236,6 +5240,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Trampoline
+      objectReference: {fileID: 0}
+    - target: {fileID: 1078538704441766784, guid: c7d7a455ef20d024b904d6ae9b28f399,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1080529890610023818, guid: c7d7a455ef20d024b904d6ae9b28f399,
         type: 3}
