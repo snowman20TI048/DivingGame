@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-    void Start()
+    public void SetUpPlayer()
     {
         rb = GetComponent<Rigidbody>();
 
