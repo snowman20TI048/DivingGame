@@ -1172,6 +1172,7 @@ MonoBehaviour:
   limitLeftBottom: {fileID: 1697223168}
   limitRightTop: {fileID: 809523250}
   sliderAltimeter: {fileID: 956945395}
+  skyboxChanger: {fileID: 514571661}
 --- !u!4 &476325452
 Transform:
   m_ObjectHideFlags: 0
@@ -1244,6 +1245,55 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4304a767f3895364f84e1e67473e420a, type: 3}
+--- !u!1 &514571660
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 514571662}
+  - component: {fileID: 514571661}
+  m_Layer: 0
+  m_Name: SkyboxChanger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &514571661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514571660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1abaaaf3755ae6b4d8f95776643d99f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skyboxMaterials:
+  - {fileID: 2100000, guid: 0d5771081eb9abb43b1792b52260d914, type: 2}
+  - {fileID: 2100000, guid: 24d76106ebc1bd947a3fed862f899b82, type: 2}
+  - {fileID: 2100000, guid: 8dd2f17b6e3f8174390967bc55ead836, type: 2}
+  - {fileID: 2100000, guid: 0e51b3d2f16325549987d8d6070de3a1, type: 2}
+  skyboxMaterialsIndex: 999
+--- !u!4 &514571662
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514571660}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &603888685 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3347936245718858967, guid: 870ed0a5a3c33ea448dcb31d95fba9e5,

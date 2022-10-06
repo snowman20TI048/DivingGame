@@ -50,6 +50,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Slider sliderAltimeter;                 // Slider コンポーネントの操作を行うための変数
 
+
+    [SerializeField]
+    private SkyboxChanger skyboxChanger;            // SkyboxChanger スクリプトの操作を行うための変数
+
+
+
+
+
     private float startPos;                         // ゲーム開始時のキャラの位置情報を代入するための変数
 
 
@@ -59,6 +67,19 @@ public class GameManager : MonoBehaviour
     private float distance;              // キャラと水面までの距離の計測用
 
     private bool isGoal;                 // ゴール判定用。距離が 0 以下になったらゴールと判定して true にする。false の間はゴールしていない状態(着水判定と同じ bool 型の利用方法)
+
+
+
+    void Awake()
+    {
+
+        // Skyboxの変更
+        skyboxChanger.ChangeSkybox();
+    }
+
+
+
+
 
 
     void Update()
