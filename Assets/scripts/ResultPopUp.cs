@@ -29,7 +29,7 @@ public class ResultPopUp : MonoBehaviour
         canvasGroupTxt.alpha = 0;
 
         // ボタンの OnClick イベントにメソッドを登録
-        btnRetry.onClick.AddListener(OnClickRetry);
+        btnRetry.onClick.AddListener(OnClickRetry);       //btnRetryをクリックしたら、OnClickRetryが実行されるようにする
 
         // ボタンを非活性化して押せない状態にする
         btnRetry.interactable = false;
@@ -44,15 +44,15 @@ public class ResultPopUp : MonoBehaviour
     public void DisplayResult()
     {
         // CanvasGroup のアルファを変更してリザルト表示。OnComplete メソッドを利用すると、DOFadeメソッドの処理を終わった後に登録してある処理を自動的に実行してくれる
-        canvasGroupPopUp.DOFade(1.0f, 1.0f)
-.OnComplete(() =>
-{
-    // ボタンを活性化して押せるようにする
-    btnRetry.interactable = true;
+        canvasGroupPopUp.DOFade(1.0f, 1.0f)    //DoFade(alpha値,何秒かけて）
+            .OnComplete(() =>  /*Dofadeが終わったら*/
+             {
+                 // ボタンを活性化して押せるようにする
+                  btnRetry.interactable = true;
 
-    // リトライの文字を点滅
-    canvasGroupTxt.DOFade(1.0f, 1.0f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
-});
+                // リトライの文字を点滅
+                 canvasGroupTxt.DOFade(1.0f, 1.0f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);   //setloop(繰り返す回数,動き）
+             });
 
         // タイトルの大きさを変更するため、一旦、現在の大きさを変数に代入して保持する
         Vector3 scale = imgTitle.transform.localScale;
@@ -61,7 +61,7 @@ public class ResultPopUp : MonoBehaviour
         imgTitle.transform.localScale = Vector3.zero;
 
         // シーケンスの宣言
-        Sequence sequence = DOTween.Sequence();
+        Sequence sequence = DOTween.Sequence();    //同時に動かさないようにするためにsequence.Appendが必要
 
         // 1秒待つ
         sequence.AppendInterval(1.0f);

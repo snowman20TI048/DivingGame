@@ -24,7 +24,7 @@ public class ObstacleFlower : MonoBehaviour
         }
 
         // 侵入してきた col.gameObject(つまり、Penguin ゲームオブジェクト)に対して、TryGetComponent メソッドを実行し、PlayerController クラスの情報を取得できるか判定する
-        if (col.gameObject.TryGetComponent(out PlayerController player))
+        if (col.gameObject.TryGetComponent(out PlayerController player))    //PlayerControllerが入っているオブジェクトをplayerにする
         {
 
             // PlayerController クラスを取得出来た場合のみ、この if 文の中の処理が実行される

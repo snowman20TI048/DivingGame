@@ -36,7 +36,7 @@ public class AudioManager : MonoBehaviour
         audioSource.Stop();
 
         // Ä¶‚·‚éBGM‚ğİ’è‚·‚é
-        audioSource.clip = bgms[(int)bgmType];
+        audioSource.clip = bgms[(int)bgmType];   //(int)bgmtype‚Åenum‚Ì”Ô†‚É•Ï‚í‚é
 
         // BGMÄ¶
         audioSource.Play();

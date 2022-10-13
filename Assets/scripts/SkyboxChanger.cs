@@ -39,7 +39,7 @@ public class SkyboxChanger : MonoBehaviour
     /// <returns></returns>
     public int RandomSelectIndexOfSkyboxMaterials()
     {
-        return Random.Range(0, skyboxMaterials.Length);
+        return Random.Range(0, skyboxMaterials.Length);  //Random.Rangeは、最小値から（最大値-1）の間をとる   *float型の場合は全部が範囲
     }
 }
 
